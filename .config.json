@@ -1,0 +1,7 @@
+{
+	"username":"test1",
+	"password":"123",
+	"db_name":"takeout",
+	"host":"127.0.0.1",
+	"prot":"3306"
+}
