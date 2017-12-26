@@ -6,32 +6,6 @@ class Validator extends Db{
 		parent::__construct($t);
 	}
 
-	public function validateForm($data,&$error,$is_add = true){
-		
-		if($is_add){
-			foreach ($this->unempty as $key) {
-				if(!$data[$key]){
-					$error[$key] = '不能为空.';
-					return false;
-				}
-			}
-		}
-
-
-		foreach ($data as $key => $value) {
-			$rule = $this->rule[$key];
-			if(!$rule){
-				$error[$key] = '传参验证未定义';
-				continue;
-			}
-			$r = $this->iterationRules($value,$rule,$error[$key]);
-			if(!$r)
-				return false;
-			unset($error[$key]);
-		}
-		return true;
-	}
-
 	public function iterationRules($val,$rule,&$error = null){
 		if(is_string($rule))
 			$rule = $this->parseRules($rule);

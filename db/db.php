@@ -5,6 +5,8 @@ class Db{
 
 	private $sql_where;
 
+	private $sql_on_duplicate;
+
 	private $sql_select;
 	private $sql_group;
 	private $sql_limit;
@@ -133,10 +135,12 @@ class Db{
 	private function make_sql_in($arr,$compopr,$and){
 		$key = key($arr);
 		$cond = $this->make_sql_comma($arr[$key],true);
-		if($this->sql_where)
-			$this->sql_where .= " $and $key $compopr ($cond) ";
-		else
+
+		if(!$this->sql_where)
 			$this->sql_where .= " $key $compopr ($cond) ";
+		else{
+			$this->sql_where .= " $and $key $compopr ($cond) ";
+		}
 		return $this;
 	}
 
@@ -145,7 +149,7 @@ class Db{
 
 	protected function join($joinTable,$connection,$inner="inner"){
 		foreach($connection as $col=>$val){
-			$cond = "$col = $val";
+			$cond = "$this->table.$col = $joinTable.$val";
 		}
 		if(!$this->sql_join){
 			$this->sql_join =" $inner JOIN $joinTable ON $cond";	
@@ -174,7 +178,12 @@ class Db{
 
 	}
 
-	protected function limit($start,$limit){
+	protected function duplicate($val){
+		$this->sql_on_duplicate = " ON DUPLICATE KEY UPDATE $val=$val+VALUES($val)";
+		return $this;
+	}
+
+	protected function limit($limit,$start=0){
 		$this->sql_limit = " limit $start,$limit";
 		return $this;
 	}
@@ -208,22 +217,20 @@ class Db{
 
 		if($this->sql_where)
 			$where = 'where';
+		 // var_dump($this->sql_where);
 
 		$this->sql = "select $this->sql_select from $this->table $this->sql_join $where $this->sql_where $this->sql_group $this->sql_order $this->sql_limit";
-
+		// var_dump($this->sql);
 		$r = $this->execute();
-		$data = $this->fetch();
 		$this->re();
-		return ['result'=>$r,'data'=>$data];
+		return $this->fetch();
 	}
 
 	protected function insert($arr){
 		$sql_col = $this->make_sql_comma($arr);
 		$sql_val = $this->make_sql_comma($arr,true);
 
-		$this->sql = "insert into $this->table ($sql_col) values ($sql_val)";
-
-
+		$this->sql = "insert into $this->table ($sql_col) values ($sql_val) $this->sql_on_duplicate";
 		return $this->execute();
 	}
 
@@ -235,6 +242,7 @@ class Db{
 			$where = 'where';
 		
 		$this->sql = "update $this->table set $sql_set $where $this->sql_where";
+		// var_dump($this->sql);	
 		$r = $this->execute();
 		$this->re();
 		return $r;
@@ -265,11 +273,17 @@ class Db{
 	}
 
 	protected function exist(){
-		return (bool)$this->get()['data'];
+		$a = $this->get();
+		return (bool)$a;
+	}
+
+	protected function frist(){
+		return $this->limit(1)->get()[0];
 	}
 
 	protected function re(){
-		 $sql_where = $sql_join ='';
+		 $this->sql_where = $this->sql_join =null;
+		 $this->count = 0;
 	}
 
 	// public function test(){

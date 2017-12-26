@@ -17,7 +17,6 @@ class Model extends Db{
 	}
 
 	public function safeFill($params){
-
 		$colName = $this->getColumnName();
 		foreach ($params as $key => $value) {
 			if(!in_array($key,$colName))
@@ -47,9 +46,11 @@ class Model extends Db{
 	}
 
 	public function save(&$msg=null){
-		
 		if(!$this->validateFill($msg))
 			return false;
+
+		if(method_exists($this,'saveBefore'))
+			$this->saveBefore($this->filled['password']);
 
 		$id = @$this->filled['id'];
 		if($id){
@@ -61,6 +62,19 @@ class Model extends Db{
 					 ->insert($this->filled);
 			return $r ? $this->getLastId() : false;
 		}
+	}
+
+	public function duplicateSave($duplicate,&$msg=null){
+		if(!$this->validateFill($msg))
+			return false;
+		if(!$this->filled[$duplicate]){
+			$msg['params'] = "条件与传参不一致。";
+			return false;
+		}
+		$r =$this->setTime('createTime')
+					->duplicate($duplicate)
+					 ->insert($this->filled);
+			return $r ? $this->getLastId() : false;
 	}
 
 	public function remove(&$msg=null){

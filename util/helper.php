@@ -12,14 +12,13 @@ function s($data=null){
 	return ['succes'=>true,'data'=>$data];
 }
 
-function e($msg=null){
-	if(is_callable($msg))
-		$msg = $msg();
+function e($msg=null,$status=403){
+	http_response_code($status);
 	return ['succes'=>false,'msg'=>$msg];
 }
 
 function json($data){
-	header('ContentType: appLication/json');
+	header('content-type: appLication/json');
 	return json_encode($data);
 }
 
@@ -40,19 +39,28 @@ function dd($data){
 }
 
 function validatePermission($k,$m){
-	$public =[
-		'cat'=>['add','remove'],
-	];
 
-	$protected = [
-		'cat'=>['test'=>1],
-	];
-
-	$vali = function($a){
-		return ($a && $a <= $_SESSION['user']['permission']);
+	$exist = function ()use($k,$m){
+		$public =
+		[
+			'cat'=>['read'],'product'=>['read'],
+			'user'=>['signup','login','loginout']
+		];
+		$protected = [
+			'cat'=>['test'=>1,'change'=>5,'add'=>5,'del'=>5],
+			'user'=>['read'],
+			'product'=>['test'=>1,'change'=>5,'add'=>5,'remove'=>5],
+			'cart'=>['duplicateAdd'=>1,'getUserCart'=>1,'change'=>1,'del'=>1],
+		];
+		return ( in_array($m,$public[$k] ?: [])) ?: @$protected[$k][$m];
 	};
 
-	return in_array($m,@$public[$k]) ? true : ($vali(@$protected[$k][$m]) ? true : false);
+	$p = @$_SESSION['user']['permission'];
+
+	// $r = $exist();
+	return (($r = $exist()) === true) ?: ($r && $r <= $p);
+
+	// return in_array($m,@$public[$k]) ? true : (($v && $v <= $p) ? true : false);
 }
 
 function file_config($key){
@@ -65,3 +73,25 @@ function file_config($key){
 
 	return $config[$key];
 }
+
+function redriect($url){
+	header("Location: $url");
+}
+
+
+function isLogin(){
+	return (bool) @$_SESSION['user'];
+}
+
+function getUserId(){
+	return $_SESSION['user']['id'];
+}
+
+function getUsername(){
+	return isLogin() ? $_SESSION['user']['username'] : '游客' ;
+}
+
+function getUserPermission(){
+	return isLogin() ? $_SESSION['user']['permission'] : 0 ;
+}
+
