@@ -10,8 +10,8 @@ $(function(){
 			<td>${item.id}</td>
 			<td>${item.title}</td>
 			<td>
-				<button class="delBtn">删除</button>
-				<button class="updateBtn">更新</button>
+				<button class="delBtn btn btn-danger">删除</button>
+				<button class="updateBtn btn btn-info">更新</button>
 			</td>
 		`;
 		

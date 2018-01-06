@@ -1,0 +1,25 @@
+.pop{
+	position:fixed;
+	/*left: 50%;*/
+	/*top: 50% ;*/
+
+	/*transform:translate(-50%,-50%);*/
+
+	/*transform:skewY(20deg);*/
+	background: #eee;
+}
+.pop .container{
+	padding: 20px;
+	width: 300px;
+	height: 300px;
+}
+.pop .hideBtn{
+	position:absolute;
+	top: 20px;
+	right: 20px;
+	cursor:pointer;
+
+}
+.pop .QRcode{
+	padding: 20px;
+}

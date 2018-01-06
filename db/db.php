@@ -24,7 +24,7 @@ class Db{
 	# 配置
 
 	public function __construct($t) {
-		$this->table = $t;
+		$this->table = "$t";
 		$this->connection();
 	}
 
@@ -103,7 +103,6 @@ class Db{
 	protected function or_not_like($arr){
 		$this->sql_where .= $this->make_sql_compopr($arr,'not like','or');
 		return $this;
-
 	}
 
 
@@ -147,14 +146,14 @@ class Db{
 
 	# inner/left/right join b on a.x = b.x .....;
 
-	protected function join($joinTable,$connection,$inner="inner"){
+	protected function join($joinTable,$connection,$type="inner"){
 		foreach($connection as $col=>$val){
 			$cond = "$this->table.$col = $joinTable.$val";
 		}
 		if(!$this->sql_join){
-			$this->sql_join =" $inner JOIN $joinTable ON $cond";	
+			$this->sql_join =" $type JOIN $joinTable ON $cond";	
 		}else{
-			$this->sql_join .=" $inner JOIN $joinTable ON $cond";
+			$this->sql_join .=" $type JOIN $joinTable ON $cond";
 		}
 		return $this;
 	}
@@ -220,16 +219,17 @@ class Db{
 		 // var_dump($this->sql_where);
 
 		$this->sql = "select $this->sql_select from $this->table $this->sql_join $where $this->sql_where $this->sql_group $this->sql_order $this->sql_limit";
+		// dd($this->sql);
+
 		// var_dump($this->sql);
 		$r = $this->execute();
 		$this->re();
 		return $this->fetch();
 	}
 
-	protected function insert($arr){
+	public function insert($arr){
 		$sql_col = $this->make_sql_comma($arr);
 		$sql_val = $this->make_sql_comma($arr,true);
-
 		$this->sql = "insert into $this->table ($sql_col) values ($sql_val) $this->sql_on_duplicate";
 		return $this->execute();
 	}
@@ -260,6 +260,7 @@ class Db{
 	}
 
 	protected function prepare(){
+		// var_dump($this->sql);
 		$this->stml = $this->pdo->prepare($this->sql);
 	}
 

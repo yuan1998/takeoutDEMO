@@ -2,7 +2,7 @@
 	tmport('api/api.php');
 
 class Cat extends Api{
-	public $table = 'cat';
+	public $table = '`cat`';
 
 	protected $rules = [
 		'id'=>'exist:id',

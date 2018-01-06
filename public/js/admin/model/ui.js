@@ -9,14 +9,19 @@ $(function(){
 
 		ModelApi.call(this,name);
 
-		this.form_el = document.querySelector(form);
-		this.table_el = document.querySelector(table);
+		this.table_el;
+		this.form_el;
 
-		this.init = function(){
+		this.init = function(form,table){
+			if(form)
+				this.form_el = document.querySelector(form);
+			if(table)
+				this.table_el = document.querySelector(table);
+
 			// if(!this.userId)
 			// 	this.getUserId();
 		};
-		this.init();
+		this.init(form,table);
 	}
 
 	Ui.__extends(ModelApi);
@@ -27,7 +32,6 @@ $(function(){
 		this.table_el.innerHTML = '';
 		for(let item of this.list){
 			this.tbodyTpl(item);
-			
 		}
 	}
 
@@ -55,11 +59,12 @@ $(function(){
 			e.preventDefault();
 			let data = this.form_el.__GETDATA('[name]');
 			if(this.id){
-				data['id'] = this.id;
+				data.append('id',this.id)
 				this.id = null;
 				this.update(data);
-			}else this.add(data);
-
+			}else
+				this.add(data);
+			fileRead(this.form_el.__FIND('img'));
 		});
 	}
 

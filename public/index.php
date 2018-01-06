@@ -5,8 +5,18 @@ tmport('api/cat.php');
 tmport('api/user.php');
 tmport('api/product.php');
 tmport('api/cart.php');
+tmport('api/order.php');
+tmport('api/location.php');
 
 init();
+
+// $db = new Db('`test`');
+
+// $data = ['tt'=>"红红公"];
+// $data = json_encode($data,JSON_UNESCAPED_UNICODE);
+// var_dump($data);
+// $r = $db->insert(['test'=>$data]);
+// var_dump($r);
 
 
 function init(){
@@ -15,6 +25,7 @@ function init(){
 
 function praseUri(){
 	$params = array_merge($_GET,$_POST);
+
 
 	$URI = trim($_SERVER['REQUEST_URI'],'/');
 
@@ -31,14 +42,10 @@ function praseUri(){
 			case '':
 				tmport('view/public/home.php');
 				die();
-			case 'buy':
-				tmport('view/user/buy.php');
-				die();
 			case 'admin':
-				$permission = getUserPermission();
-				if(!($permission > 5))
-					redriect('404');
-				tmport('view/admin/'.$uri[1].'.php');
+				if(validateUrlFile(get_path("view/admin/".$uri[1].".php"),5))
+					tmport("view/admin/".$uri[1].".php");
+				else tmport('view/public/404.php');
 				die();
 			case 'login':
 				tmport('view/public/login.php');
@@ -52,6 +59,11 @@ function praseUri(){
 				die();
 			case 'getUserId':
 				return s(@$_SESSION['user']['id']);
+			case 'user':
+				if(validateUrlFile(get_path("view/user/".$uri[1].".php"),1))
+					tmport("view/user/".$uri[1].".php");
+				else tmport('view/public/404.php');
+				die();
 			default:
 				tmport('view/public/404.php');
 				die();

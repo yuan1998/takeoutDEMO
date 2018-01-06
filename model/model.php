@@ -12,6 +12,10 @@ class Model extends Db{
 		$this->validate = new Validator($this->table);
 	}
 
+	public function getCount(){
+		return $this->select(['count(*)'=>''])->get()[0]['count(*)'];
+	}
+
 	public function fill($params){
 		$this->filled = $params;
 	}
@@ -25,6 +29,10 @@ class Model extends Db{
 
 		$this->fill($params);
 		return $this;
+	}
+
+	public function idGetItem($id){
+		return $this->where(['id'=>$id])->get();
 	}
 
 	public function judgedOnParams($p){
@@ -56,7 +64,7 @@ class Model extends Db{
 		if($id){
 			return $this->setTime('updateTime')
 						->where(['id'=>$id])
-						->update($this->filled);
+						->update($this->filled) ? $id :false;
 		}else{
 			$r =$this->setTime('createTime')
 					 ->insert($this->filled);
@@ -98,7 +106,7 @@ class Model extends Db{
 		return true;
 	}
 
-	private function setTime($col){
+	public function setTime($col){
 		date_default_timezone_set('UTC');
 		$this->filled[$col] = date('Y-m-d H:i:s',time()+ 8*3600);
 		return $this;

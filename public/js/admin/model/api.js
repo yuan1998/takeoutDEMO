@@ -6,13 +6,14 @@ $(function(){
 	function Api(name){
 		this.name = name;
 		this.page = 1;
+		this.limit = 10;
 		this.apiUrl = '/api/'+ name +'/';
 	}
 
 	const ma = Api.prototype;
 
-	ma.read = function(limit){
-		$.post(this.apiUrl +'read',{page:this.page,limit:limit})
+	ma.read = function(){
+		$.post(this.apiUrl +'read',{page:this.page,limit:this.limit})
 			.then((res)=>{
 				this.list = res.data;
 				if(this.afterRead)
@@ -20,13 +21,27 @@ $(function(){
 			})
 	}
 
+	ma.getCount = function(){
+		$.get(this.apiUrl +'getCount').then(res=>{
+			this.count = res.data;
+			if(this.afterGetCount)
+				this.afterGetCount();
+		})
+	}
+
 	ma.add = function(params){
-		$.post(this.apiUrl +'add',params)
-			.then((res)=>{
-				this.lastId = res.data;
-				this.form_el.reset();
-				if(this.afterRender)
-					this.afterRender();
+		$.ajax({
+			url:this.apiUrl +'add',
+			method:"POST",
+			contentType:false,
+			processData:false,
+			cache:false,
+			data:params
+		}).then((res)=>{
+			this.lastId = res.data;
+			this.form_el.reset();
+			if(this.afterRender)
+				this.afterRender();
 		})
 	}
 
@@ -39,11 +54,17 @@ $(function(){
 	}
 
 	ma.update = function(params){
-		$.post(this.apiUrl+'change',params)
-			.then((res)=>{
-				this.form_el.reset();
-				if(this.afterRender)
-					this.afterRender();
+		$.ajax({
+			url:this.apiUrl +'change',
+			method:"POST",
+			contentType:false,
+			processData:false,
+			cache:false,
+			data:params
+		}).then((res)=>{
+			this.form_el.reset();
+			if(this.afterRender)
+				this.afterRender();
 		})
 	}
 	ma.getUserId = function(){

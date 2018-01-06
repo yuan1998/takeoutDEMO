@@ -1,6 +1,6 @@
 <?php
 class User extends Api{
-	public $table = 'user';
+	public $table = '`user`';
 
 	protected $rules = [
 		'username'=>'maxlength:25|minlength:5|only:username',
@@ -45,6 +45,11 @@ class User extends Api{
 	public static function loginout(){
 		unset($_SESSION['user']);
 		return isset($_SESSION['user']) ? false : true;
+	}
+	public function getUserData(){
+		$id = getUserId();
+		$r = $this->where(['id'=>$id])->get();
+		return $r;
 	}
 
 	public function test(){

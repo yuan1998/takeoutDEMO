@@ -1,0 +1,7 @@
+.active{
+	background: #00fdff;
+}
+
+html::-webkit-scrollBar{
+	display: none;
+}

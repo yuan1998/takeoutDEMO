@@ -1,7 +1,8 @@
 $(function(){
 	'use strict';
 
-	const el_form = document.querySelector('form');
+	const el_form = _dq('form');
+	const el_signup = _dq('.signup');
 
 	init();
 
@@ -9,17 +10,24 @@ $(function(){
 		addFormEvent();
 	}
 
-
 	function addFormEvent(){
 		el_form.addEventListener('submit',(e)=>{
 			e.preventDefault();
-			$.post('/api/user/login',el_form.__GETDATA('[name]'))
-				.then(function(res){
-					console.log(1);
-					location.href = '';
+			$.ajax({
+				url:'/api/user/login',
+				processData:false,
+				method:"POST",
+				contentType:false,
+				cache:false,
+				data:el_form.__GETDATA('[name]')
+			}).then(function(res){
+					pop('登陆成功.');
+					setTimeout(function(e){
+						_href('/');						
+					},1000)
 				},function(res){
-					console.log('2',res.responseJSON);
-				});
+					pop('用户名或密码有误.');
+				})
 		})
 	}
 });
