@@ -53,7 +53,7 @@ function praseUri(){
 			case 'signup':
 				tmport('view/public/signup.php');
 				die();
-			case 'loginout':
+			case 'logout':
 				User::loginout();
 				redriect('/');
 				die();

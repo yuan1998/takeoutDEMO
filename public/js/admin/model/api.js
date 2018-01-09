@@ -12,12 +12,12 @@ $(function(){
 
 	const ma = Api.prototype;
 
-	ma.read = function(){
+	ma.read = function(t){
 		$.post(this.apiUrl +'read',{page:this.page,limit:this.limit})
 			.then((res)=>{
 				this.list = res.data;
 				if(this.afterRead)
-					this.afterRead();
+					this.afterRead(t);
 			})
 	}
 

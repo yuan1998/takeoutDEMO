@@ -43,16 +43,10 @@ class Order extends Api{
 	}
 
 	public function createOrder($p,&$msg){
-		if(!$p['list']){
-			$msg = '请用正确姿势购买';
-			return false;
-		}
+
 		$cart = new Cart();
-		foreach($p['list'] as $key=>$value){
-			$cart->or_where(['cart.id'=>$value]);
-		}
 		$data = $cart->getUserCart($p,$msg);
-		if(count($data) !== count($p['list'])){
+		if(!$data){
 			$msg = '请用正确姿势购买';
 			return false;
 		}
@@ -60,11 +54,12 @@ class Order extends Api{
 		$product = new Product();
 		foreach($data as $key=>$value){
 			$price += $value['count'] * $value['price'];
+			$count += $value['count'];
 			$product->or_where(['id'=>$value['product_id']]);
 		}
 		$snapshot = $product->get();
 		$order_id = 'TO-'.rand(0,9).pow(time(),2);
-		$r = $this->add(['order_id'=>$order_id,'snapshot'=>json_encode($snapshot,JSON_UNESCAPED_UNICODE),'product'=>json_encode($data,JSON_UNESCAPED_UNICODE),'price'=>$price,'user_id'=>$userid],$msg);
+		$r = $this->add(['order_id'=>$order_id,'snapshot'=>json_encode($snapshot,JSON_UNESCAPED_UNICODE),'product'=>json_encode($data,JSON_UNESCAPED_UNICODE),'price'=>$price,'count'=>$count,'user_id'=>$userid],$msg);
 		if($r !== false){
 			foreach($p['list'] as $key=>$value){
 				$cart->or_where(['id'=>$value]);

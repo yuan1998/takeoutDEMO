@@ -28,11 +28,14 @@ $(function(){
 
 	const mu = Ui.prototype;
 
-	mu.afterRead = function(){
-		this.table_el.innerHTML = '';
+	mu.afterRead = function(t){
+		if(!t)
+			this.table_el.innerHTML = '';
 		for(let item of this.list){
 			this.tbodyTpl(item);
 		}
+		if(this.renderAfterEvent)
+			this.renderAfterEvent(this.table_el);
 	}
 
 	mu.addDeleteEvent = function (el,id){

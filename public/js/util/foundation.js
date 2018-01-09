@@ -54,6 +54,15 @@ $(function(){
 		}
 	}
 
+	window._s = {
+		get:function(key){
+			return JSON.parse(localStorage.getItem(key));
+		},
+		set:function(key,value){
+			localStorage.setItem(key,JSON.stringify(value));
+		}
+	}
+
 
 	Function.prototype.__extends = function(Klass) {
 		this.prototype = Object.create(Klass.prototype);
@@ -100,10 +109,10 @@ $(function(){
 	}
 
 	Array.prototype.__UNSET = function(data){
-		let index = this.indexOf(function(e){
+		let index = this.findIndex(function(e){
 			return e == data;
 		})
-		if(index == false)
+		if(index == -1)
 			return;
 		return this.splice(index,1);
 	}

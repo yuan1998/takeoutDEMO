@@ -5,6 +5,7 @@
 	<title>Product</title>
 	<?php tmport("public/component/lib.php"); ?>
 	<?php tmport("public/component/js.model.php"); ?>
+	<link rel="stylesheet" type="text/css" href="/css/view/admin-product.css">
 	<link rel="stylesheet" type="text/css" href="/css/public/base.css">
 
 	<script src="/js/admin/product.js"></script>
@@ -12,7 +13,6 @@
 <body>
 	<div class="container">
 		<div class="header">
-			HELLO WORLD;
 		</div>
 		<div class="col-xs-12 col-md-3">
 			<?php tmport('public/component/admin/side.php');?>

@@ -1,0 +1,4 @@
+tbody tr td:nth-of-type(2){
+	width: 90px;
+	height: 90px;
+}
