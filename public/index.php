@@ -35,7 +35,8 @@ function praseUri(){
 				if(!validatePermission($uri[1],$uri[2]))
 					return e('权限不足.');
 				$class = new $uri[1];
-				$r = $class->$uri[2]($params,$msg);
+				$a = $uri[2];
+				$r = $class->$a($params,$msg);
 				return $r !== false ? s($r) :e($msg);
 			case '':
 				tmport('view/public/home.php');

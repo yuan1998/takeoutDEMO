@@ -83,11 +83,11 @@ $(function(){
 
 
 		div.control.addEventListener('mouseleave',function(){
-			div.lessBtn.style.opacity = 
+			div.lessBtn.style.opacity =
 			div.addBtn.style.opacity = 0;
 		})
 		div.control.addEventListener('mouseenter',function(){
-			div.lessBtn.style.opacity = 
+			div.lessBtn.style.opacity =
 			div.addBtn.style.opacity = 1;
 		})
 	}
@@ -169,10 +169,10 @@ $(function(){
 
 		//		添加购物车
 		this.cart_add = function(item){
-			let index = findIndex(item.data.product_id);
+			let index = this.findIndex(item.data.product_id);
 			if(index == -1)
 				this.list.push(item);
-			else this.list[index].data.count++; 
+			else this.list[index].data.count++;
 			this.localStorageSave();
 			this.getList();
 		}
@@ -210,7 +210,7 @@ $(function(){
 						this.coverEL.innerHTML='';
 						this.render();
 						this.cart_total();
-					}	
+					}
 			})
 		}
 
@@ -233,7 +233,7 @@ $(function(){
 				this.cartTmp(item);
 			}
 		}
-		
+
 
 		this.payEvent = function(){
 			$.get('/api/order/createOrder').then(function(e){
