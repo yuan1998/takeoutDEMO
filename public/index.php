@@ -8,7 +8,6 @@ tmport('api/cart.php');
 tmport('api/order.php');
 tmport('api/location.php');
 
-init();
 
 // $db = new Db('`test`');
 
@@ -17,7 +16,6 @@ init();
 // var_dump($data);
 // $r = $db->insert(['test'=>$data]);
 // var_dump($r);
-
 
 function init(){
 	praseUri();
@@ -72,6 +70,7 @@ function praseUri(){
 	echoDie($result());
 }
 
+init();
 
 
 // $ins = new cat('cat');
