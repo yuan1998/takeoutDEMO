@@ -40,15 +40,15 @@ class Db{
 		$user = $username;
 		$password = $password;
 		$options = [
-	    PDO::ATTR_CASE => PDO::CASE_NATURAL, 
+	    PDO::ATTR_CASE => PDO::CASE_NATURAL,
 	    /*PDO::CASE_NATURAL | PDO::CASE_LOWER 小写，PDO::CASE_UPPER 大写， */
-	    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, 
+	    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 	    /*是否报错，PDO::ERRMODE_SILENT 只设置错误码，PDO::ERRMODE_WARNING 警告级，如果出错提示警告并继续执行| PDO::ERRMODE_EXCEPTION 异常级，如果出错提示异常并停止执行*/
-	    PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL, 
+	    PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
 	    /* 空值的转换策略 */
-	    PDO::ATTR_STRINGIFY_FETCHES => false, 
+	    PDO::ATTR_STRINGIFY_FETCHES => false,
 	    /* 将数字转换为字符串 */
-	    PDO::ATTR_EMULATE_PREPARES => false, 
+	    PDO::ATTR_EMULATE_PREPARES => false,
 	    /* 模拟语句准备 */
 		];
 
@@ -151,7 +151,7 @@ class Db{
 			$cond = "$this->table.$col = $joinTable.$val";
 		}
 		if(!$this->sql_join){
-			$this->sql_join =" $type JOIN $joinTable ON $cond";	
+			$this->sql_join =" $type JOIN $joinTable ON $cond";
 		}else{
 			$this->sql_join .=" $type JOIN $joinTable ON $cond";
 		}
@@ -214,12 +214,11 @@ class Db{
 	protected function get(){
 		$this->sql_select = $this->sql_select ?: "*";
 
-		if($this->sql_where)
-			$where = 'where';
-		 // var_dump($this->sql_where);
+		$where = ($this->sql_where) ? 'where' : '';
+
+
 
 		$this->sql = "select $this->sql_select from $this->table $this->sql_join $where $this->sql_where $this->sql_group $this->sql_order $this->sql_limit";
-		// dd($this->sql);
 
 		// var_dump($this->sql);
 		$r = $this->execute();
@@ -237,12 +236,12 @@ class Db{
 	protected function update($arr){
 		unset($arr['id']);
 		$sql_set = trim($this->make_sql_compopr($arr,'=',','),',');
-	
+
 		if($this->sql_where)
 			$where = 'where';
-		
+
 		$this->sql = "update $this->table set $sql_set $where $this->sql_where";
-		// var_dump($this->sql);	
+		// var_dump($this->sql);
 		$r = $this->execute();
 		$this->re();
 		return $r;

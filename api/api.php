@@ -22,7 +22,7 @@ class Api extends Model{
 	public function read($p,&$msg){
 		$limit = $p['limit'] ?: 10;
 		$offset = (($p['page'] ?: 1) - 1)*$limit;
-		$by = $p['by'] ?: 'id';
+		$by = @$p['by'] ?: 'id';
 		return $this->order($by)->limit($limit,$offset)->get();
 	}
 
@@ -67,7 +67,7 @@ class Api extends Model{
 
 
 
-	
 
-	
+
+
 }

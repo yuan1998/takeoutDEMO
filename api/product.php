@@ -26,7 +26,7 @@ class Product extends Api{
 	public function read($p,&$msg){
 		$limit = $p['limit'] ?: 10;
 		$offset = (($p['page'] ?: 1) - 1)/$limit;
-		$by = $p['by'] ?: 'id';
+		$by = @$p['by'] ?: 'id';
 		if($data = $this->order($by)->limit($limit,$offset)->get()){
 			foreach($data as &$item){
 				if($item['coverUrl'])
@@ -54,7 +54,7 @@ class Product extends Api{
 	public function test(){
 		return 'haha';
 	}
- 
+
 
 
 }
