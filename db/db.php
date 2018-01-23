@@ -36,7 +36,7 @@ class Db{
 		$dbname = file_config('db_name');
 		$prot = file_config('prot');
 
-		$dsn = "mysql:host=$host;prot=$prot;dbname=$dbname";
+		$dsn = "mysql:host=$host;prot=$prot;dbname=$dbname;charset=utf8";
 		$user = $username;
 		$password = $password;
 		$options = [
