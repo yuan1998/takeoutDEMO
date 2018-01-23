@@ -30,7 +30,7 @@ function praseUri(){
 	$URI = trim($_SERVER['REQUEST_URI'],'/');
 
 	$uri = explode('/',explode('?',$URI)[0]);
-	dd($uri);
+
 	$result = function()use($uri,$params){
 		switch($uri[0]){
 			case 'api':
