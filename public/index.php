@@ -29,8 +29,8 @@ function praseUri(){
 
 	$URI = trim($_SERVER['REQUEST_URI'],'/');
 
-	$uri = split('[/]',explode('?',$URI)[0]);
-
+	$uri = explode('/',explode('?',$URI)[0]);
+	dd($uri);
 	$result = function()use($uri,$params){
 		switch($uri[0]){
 			case 'api':
@@ -67,7 +67,7 @@ function praseUri(){
 			default:
 				tmport('view/public/404.php');
 				die();
-		} 
+		}
 	};
 	echoDie($result());
 }
